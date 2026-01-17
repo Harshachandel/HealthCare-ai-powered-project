@@ -1,8 +1,33 @@
 // FeaturesSection.jsx - EXACT STRUCTURE MATCH
 import React from 'react';
 import '../style.css';
+import FindDoctor from './ChooseDoctor';
+import doctors from '../data/doctorsData';
+import { useForm } from 'react-hook-form';
 
 const FeaturesSection = () => {
+
+  const {register,handleSubmit,reset} = useForm()
+
+  // function addData(data){
+  //   alert(data)
+  //   reset()
+  // }
+
+  function addData(data){
+  
+
+    const filterData = doctors.filter((ele)=>{
+
+      return ele.title.toLowerCase() === data.Symptoms_Category.toLowerCase()
+    
+    })
+
+    console.log(filterData)
+
+  reset()
+}
+
   return (
     <section className="fsct">
       <div className="fsctCont">
@@ -22,11 +47,52 @@ const FeaturesSection = () => {
               digitally manages prescriptions, bills, and appointments.
             </p>
             <div className="fsctBtns">
-              <button className="fsctBtn1">Try Now</button>
+              <button type='' className="fsctBtn1" data-bs-toggle="modal" data-bs-target="#exampleModal">Try Now</button>
               <button className="fsctBtn2">Book Demo</button>
             </div>
           </div>
         </div>
+
+
+        {/* <!-- Button trigger modal --> */}
+{/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> */}
+
+{/* <!-- Modal --> */}
+<div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="" className="modal-body form" onSubmit={handleSubmit(addData)}>
+        <label htmlFor="" className='pb-3'>Enter Symptoms</label>
+        <input type="text" {...register('Symptoms')} className='form-control'/>
+        
+        <select name="" {...register('Symptoms_Category')} className='form-select mt-3 mb-3' id="">
+          <option value="" selected disabled>Choose Symptoms Category</option>
+          <option value="Multi Specialist">General</option>
+          <option value="Gastroenterologist">Digestive / Stomach Pain</option>
+          <option value="Neurologist">Headache / Migraine</option>
+          <option value="Orthopedic">Back Pain / Joint Pain</option>
+          <option value="Dermatologist">Skin</option>
+          <option value="Psychiatrist/Psychologist">Mental / Emotional</option>
+        </select>
+        {/* ... */}
+      
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" className="btn btn-primary" >Save changes</button>
+      </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
 
         {/* EXACT RIGHT 3 SQUARE CARDS - Vertical Stack */}
         <div className="fsctRight">
