@@ -1,11 +1,16 @@
 // FeaturesSection.jsx - EXACT STRUCTURE MATCH
-import React from 'react';
+import React, { useState } from 'react';
 import '../style.css';
 import FindDoctor from './ChooseDoctor';
 import doctors from '../data/doctorsData';
 import { useForm } from 'react-hook-form';
+import { NavLink, useNavigate } from 'react-router-dom';
+import DoctorTalk from './DoctorTalk';
 
 const FeaturesSection = () => {
+
+  const [showDoctor,setShowDoctor] = useState([])
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   const {register,handleSubmit,reset} = useForm()
 
@@ -14,16 +19,20 @@ const FeaturesSection = () => {
   //   reset()
   // }
 
+  const redirect = useNavigate()
+
   function addData(data){
   
 
     const filterData = doctors.filter((ele)=>{
 
-      return ele.title.toLowerCase() === data.Symptoms_Category.toLowerCase()
+      return ele.title==="Multi Specialist" || ele.title.toLowerCase() === data.Symptoms_Category.toLowerCase() 
     
     })
 
-    console.log(filterData)
+    setShowDoctor(filterData)
+
+    // const filterID = doctors.filter((ele)=>ele.id)
 
   reset()
 }
@@ -47,7 +56,7 @@ const FeaturesSection = () => {
               digitally manages prescriptions, bills, and appointments.
             </p>
             <div className="fsctBtns">
-              <button type='' className="fsctBtn1" data-bs-toggle="modal" data-bs-target="#exampleModal">Try Now</button>
+              <button type='' className="fsctBtn1" data-bs-toggle="modal" data-bs-target="#symptomsModal">Try Now</button>
               <button className="fsctBtn2">Book Demo</button>
             </div>
           </div>
@@ -60,7 +69,7 @@ const FeaturesSection = () => {
 </button> */}
 
 {/* <!-- Modal --> */}
-<div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div className="modal fade" id="symptomsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog">
     <div className="modal-content">
       <div className="modal-header">
@@ -84,7 +93,7 @@ const FeaturesSection = () => {
       
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" className="btn btn-primary" >Save changes</button>
+        <button type="submit" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#doctorModal">proceed</button>
       </div>
 
       </form>
@@ -92,6 +101,54 @@ const FeaturesSection = () => {
     </div>
   </div>
 </div>
+
+
+
+<div className="modal fade" id="doctorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog modal-xl">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div action="" className="modal-body d-flex justify-content-center gap-5 align-items-center">
+        
+          {
+              showDoctor.map((ele)=>(
+              <div key={ele.id} className='col-lg-4 p-2'>
+              <img src={ele.image} className='w-100' alt="" />
+              <h3>{ele.name}</h3>
+              <h6>post : {ele.title}</h6>
+              <button className="btn btn-primary" onClick={() => setSelectedDoctor(ele)} >Select Me</button>
+              
+          </div>
+            ))
+          }
+
+         
+   
+
+      </div>
+
+      <div>
+         {
+  selectedDoctor && (
+    <h3 className="text-center text-success w-100">
+      Thank you for selecting {selectedDoctor.name}
+        {
+        <button onClick={()=>redirect(`/DoctorChat/${selectedDoctor.id}`)} data-bs-dismiss="modal" className="btn btn-info">Chat With {selectedDoctor.name}</button>
+      }
+    </h3>
+  )
+}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
 
 
         {/* EXACT RIGHT 3 SQUARE CARDS - Vertical Stack */}
